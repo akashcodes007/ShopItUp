@@ -37,47 +37,6 @@ const Cart = () => {
 
 
 
-  const initiatePayment = async () => {
-    let oid = Math.floor(Math.random() * Date.now());
-
-    // Get a Transaction toke
-    const data = { cartItems, totalPrice, oid, email : "email" };
-
-    let a = await fetch('/api/pretransaction', {
-      method: 'POST', // or 'PUT'
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-    let txnToken = await a.json()
-    console.log(txnToken);
-
-    var config = {
-      "root": "",
-      "flow": "DEFAULT",
-      "data": {
-        "orderId": oid, /* update order id */
-        "token": txnToken, /* update token value */
-        "tokenType": "TXN_TOKEN",
-        "amount": totalPrice /* update amount */
-      },
-      "handler": {
-        "notifyMerchant": function (eventName, data) {
-          console.log("notifyMerchant handler function called");
-          console.log("eventName => ", eventName);
-          console.log("data => ", data);
-        }
-      }
-    };
-    window.Paytm.CheckoutJS.init(config).then(function onSuccess() {
-      // after successfully updating configuration, invoke JS Checkout
-      window.Paytm.CheckoutJS.invoke();
-    }).catch(function onError(error) {
-      console.log("error => ", error);
-    });
-  }
-
 
 
   return (
